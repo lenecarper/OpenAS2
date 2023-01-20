@@ -1,0 +1,81 @@
+<!-- Defined partnerships to send/receive messages -->
+
+<partnerships>
+<!-- Define partners, example is CompanyX and CompanyY -->
+<partner name="CompanyXStation"
+        as2_id="company-x-as2-id"
+        x509_alias="company-x"
+        email="companyx@gmail.com"/>
+<partner name="CompanyYPartner"
+        as2_id="company-y-as2-id"
+        x509_alias="company-y"
+        email="companyy@gmail.com"/>
+
+<!-- Connect partnership to send messages from X to Y -->
+<partnership name="CompanyXStation-to-CompanyYPartner">
+        <!-- Define the sender -->
+        <sender name="CompanyXStation"/>
+        <!-- Define the receiver -->
+        <receiver name="CompanyYPartner"/>
+        <!-- AS2 protocol for sending messages -->
+        <attribute name="protocol" value="as2"/>
+        <!-- Encode the messages in 8bit -->
+        <attribute name="content_transfer_encoding" value="8bit"/>
+        <!-- Compress the sent AS2 messages -->
+        <attribute name="compression_type" value="ZLIB"/>
+        <!-- Subject information -->
+        <attribute name="subject" value="From OpenAS2A to OpenAS2B"/>
+        <attribute name="mdnsubject" value="Your requested MDN response from $receiver.as2_id$"/>
+        
+        <!-- Example URL to receive messages for CompanyX -->
+        <attribute name="as2_url" value="http://service.beta.as2gateway.com:8280/service/as2-receiver"/>
+        <!-- Example URL to receive MDN for CompanyX -->
+        <attribute name="as2_mdn_to" value="http://receipt.beta.as2gateway.com:8284/service/as2-async-mdn-receiver"/>
+        <!-- Configuration for the MDN, optional signing, message encryption etc -->
+        <attribute name="as2_mdn_options" value="signed-receipt-protocol=optional, pkcs7-signature; signed-receipt-micalg=optional, sha-256"/>
+        <!-- Encryption and signing algorithm -->
+        <attribute name="encrypt" value="3DES"/>
+        <attribute name="sign" value="SHA1"/>
+        <!-- Maximum retries to resend a failed message (3) -->
+        <attribute name="resend_max_retries" value="3"/>
+
+        <!-- Verification, encryption, signing and message protection -->
+        <attribute name="prevent_canonicalization_for_mic" value="false"/>
+        <attribute name="no_set_transfer_encoding_for_signing" value="false"/>
+        <attribute name="no_set_transfer_encoding_for_encryption" value="false"/>
+        <attribute name="rename_digest_to_old_name" value="false"/>
+        <attribute name="remove_cms_algorithm_protection_attrib" value="false"/>
+</partnership>
+
+<!-- Connect partnership to send messages from Y to X -->
+<partnership name="CompanyYPartner-to-CompanyXStation">
+        <!-- Define the sender -->
+        <sender name="CompanyYPartner"/>
+        <!-- Define the receiver -->
+        <receiver name="CompanyXStation"/>
+        <!-- AS2 protocol for sending messages -->
+        <attribute name="protocol" value="as2"/>
+        <!-- Encode the messages in 8bit -->
+        <attribute name="content_transfer_encoding" value="8bit"/>
+        <!-- Subject information -->
+        <attribute name="subject" value="From OpenAS2B to OpenAS2A"/>
+
+        <!-- Example URL to receive messages, use your public IP to configure this, leave the port the same -->
+        <attribute name="as2_url" value="http://my-public-ip:10080"/>
+        <!-- Example URL to receive messages, use your public IP to configure this, leave the port the same -->
+        <attribute name="as2_mdn_to" value="http://my-public-ip:10081"/>
+        <!-- Configuration for the MDN, optional signing, message encryption etc -->
+        <attribute name="as2_mdn_options" value="signed-receipt-protocol=optional, pkcs7-signature; signed-receipt-micalg=optional, sha256"/>
+        <!-- Encryption and signing algorithm -->
+        <attribute name="encrypt" value="3DES"/>
+        <attribute name="sign" value="SHA256"/>
+
+        <!-- Verification, encryption, signing and message protection -->
+        <attribute name="prevent_canonicalization_for_mic" value="false"/>
+        <attribute name="remove_cms_algorithm_protection_attrib" value="false"/>
+        <attribute name="no_set_transfer_encoding_for_signing" value="false"/>
+        <attribute name="no_set_transfer_encoding_for_encryption" value="false"/>
+        <attribute name="rename_digest_to_old_name" value="false"/>
+        <attribute name="remove_cms_algorithm_protection_attrib" value="false"/>
+    </partnership>
+</partnerships>
